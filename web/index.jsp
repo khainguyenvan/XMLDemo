@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Login Page</h1>
-        <form action="CenterSevlet" method="POST">
+        <form action="CenterServlet" method="POST">
             Username <input type="text" name="username" />
             Password <input type="password" name="password" />
             <input type="submit" value="Login" name="btAction" />

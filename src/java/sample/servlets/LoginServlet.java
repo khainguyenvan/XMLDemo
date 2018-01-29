@@ -31,12 +31,12 @@ import sample.util.XMLUlti;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
-    private final String xmlFile = "WEB-INF/studentAccounts.xml";
+    private final String xmlFile = "/WEB-INF/studentAccounts.xml";
     private final String searchPage = "search.jsp";
     private final String invalidPage = "invalidPage.html";
     private boolean found;
     private String fullName;
-    String uri = invalidPage;
+    private String uri = invalidPage;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,19 +16,51 @@
     <body>
         <h1>Welcome, ${sessionScope.FULLNAME}</h1>
         Search Page
-        <form action="CenterSevlet">
-            <input type="text" name="searchValue" value="" />
+        <form action="CenterServlet">
+            <input type="text" name="txtSearchValue"/>
             <input type="submit" value="Search" name="btAction" />
         </form>
-        
+
         <c:set var="searchValue" value="${param.txtSearchValue}"/>
-        
+
         <c:if test="${not empty searchValue}">
+            ${param.txtSearchValue}
             <c:set var="result" value="${requestScope.SEARCHRESULT}"/>
             <c:if test="${not empty result}">
-                
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Class</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Sex</th>
+                            <th>Status</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="dto" items="${result}" varStatus="counter" >
+                            <tr>
+                                <td>${counter.count}</td>
+                                <td>${dto.sClass}</td>
+                                <td>${dto.lastname} ${dto.firstname} ${dto.middlename}</td>
+                                <td>${dto.address}</td>
+                                <td><c:if test="${fn:trim(dto.sex) == '1'}" >male</c:if><c:if test="${fn:trim(dto.sex) == '0'}" >female</c:if></td>
+                                <td>${dto.status}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+            </c:if>
+            <c:if test="${empty result}">
+                no result
             </c:if>
         </c:if>
-            
+        <c:if test="${empty searchValue}">
+            empty search value
+        </c:if>
+
+
     </body>
 </html>

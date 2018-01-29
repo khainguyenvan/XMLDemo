@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author khai
  */
-@WebServlet(name = "CenterSevlet", urlPatterns = {"/CenterSevlet"})
-public class CenterSevlet extends HttpServlet {
+@WebServlet(name = "CenterServlet", urlPatterns = {"/CenterServlet"})
+public class CenterServlet extends HttpServlet {
 
     private final String processLogin = "LoginServlet";
     private final String processSearch = "SearchServlet";
@@ -40,7 +40,6 @@ public class CenterSevlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             String url = processLogin;
-            System.out.println("hello");
             String button = request.getParameter("btAction");
             if (button == null) {
                 url = invalid;

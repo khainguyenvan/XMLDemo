@@ -18,7 +18,7 @@ student>lastname+middlename+firstname+sex+password+address+status
             Khanh
         </firstname>
         <sex>
-            1
+            0
         </sex>
         <password>
             SE879
@@ -30,7 +30,7 @@ student>lastname+middlename+firstname+sex+password+address+status
             studying
         </status>
     </student>
-    <student id="fb456789" class="SE0662">
+    <student id="SE61960" class="SE0662">
         <lastname>Khai</lastname>
         <middlename>V</middlename>
         <firstname>Nguyen</firstname>

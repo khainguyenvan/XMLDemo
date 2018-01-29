@@ -35,7 +35,7 @@ import sample.util.XMLUlti;
 @WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
 public class SearchServlet extends HttpServlet {
 
-    private final String xmlFile = "WEB-INF/studentAccounts.xml";
+    private final String xmlFile = "/WEB-INF/studentAccounts.xml";
     private final String uri = "search.jsp";
 
     /**
@@ -47,19 +47,20 @@ public class SearchServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String searchValue = request.getParameter("searchValue");
+        String searchValue = request.getParameter("txtSearchValue");
         try {
             String realPath = this.getServletContext().getRealPath("/");
             String xmlFilePath = realPath + xmlFile;
             Document doc = XMLUlti.parseFileTODOMTREE(xmlFilePath);
             if (doc != null) {
                 XPath xpath = XMLUlti.getXPath();
-                String exp = "//student[contains(address,'" + searchValue + "'')]";
+                String exp = "//student[contains(address,'" + searchValue + "')]";
+                System.out.println(exp);
+
                 NodeList students = (NodeList) xpath.evaluate(exp, doc, XPathConstants.NODESET);
                 if (students != null) {
                     List<StudentDTO> listStudent = null;
