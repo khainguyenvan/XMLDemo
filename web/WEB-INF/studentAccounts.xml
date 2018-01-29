@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+
+student>lastname+middlename+firstname+sex+password+address+status
+-->
+<students>
+    <student id="98765" class="SE0662">
+        <lastname>
+            Kieu
+        </lastname>
+        <middlename>
+            T.
+        </middlename>
+        <firstname>
+            Khanh
+        </firstname>
+        <sex>
+            1
+        </sex>
+        <password>
+            SE879
+        </password>
+        <address>
+            45 Nguyen Van A
+        </address>
+        <status>
+            studying
+        </status>
+    </student>
+    <student id="fb456789" class="SE0662">
+        <lastname>Khai</lastname>
+        <middlename>V</middlename>
+        <firstname>Nguyen</firstname>
+        <sex>1</sex>
+        <password>123456</password>
+        <address>hello</address>
+        <status>studying</status>
+    </student>
+</students>
