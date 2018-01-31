@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -56,19 +57,25 @@ public class LoginServlet extends HttpServlet {
 
         try {
             /* TODO output your page here. You may use following sample code. */
-            String realPath = this.getServletContext().getRealPath("/");
-            String xmlFilePath = realPath + xmlFile;
-            Document doc = XMLUlti.parseFileTODOMTREE(xmlFilePath);
-            
+
+            ServletContext context = this.getServletContext();
+            Document doc = (Document) context.getAttribute("DOMTREE");
+            if (doc == null) {
+                String realPath = this.getServletContext().getRealPath("/");
+                String xmlFilePath = realPath + xmlFile;
+                doc = XMLUlti.parseFileTODOMTREE(xmlFilePath);
+                context.setAttribute("DOMTREE", doc);
+            }
+
             if (doc != null) {
                 this.found = false;
                 checkLogin(username, password, doc);
-                if(this.found){
+                if (this.found) {
                     uri = searchPage;
                     HttpSession session = request.getSession();
                     session.setAttribute("USER", username);
                     session.setAttribute("FULLNAME", this.fullName);
-                    
+
                 }
 
             }
@@ -102,12 +109,12 @@ public class LoginServlet extends HttpServlet {
 
                     } else if (tmp.getNodeName().equals("password")) {
                         String pass = tmp.getTextContent().trim();
-                        if(!pass.equals(password.trim())){
+                        if (!pass.equals(password.trim())) {
                             break;
                         }
-                    }else if (tmp.getNodeName().equals("status")) {
+                    } else if (tmp.getNodeName().equals("status")) {
                         String status = tmp.getTextContent().trim();
-                        if(!status.equals("dropout")){
+                        if (!status.equals("dropout")) {
                             this.found = true;
                             return;
                         }
@@ -117,7 +124,7 @@ public class LoginServlet extends HttpServlet {
         }
         NodeList children = node.getChildNodes();
         int i = 0;
-        while(i < children.getLength()){
+        while (i < children.getLength()) {
             checkLogin(username, password, children.item(i++));
         }
     }

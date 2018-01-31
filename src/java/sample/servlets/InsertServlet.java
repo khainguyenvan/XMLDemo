@@ -7,8 +7,8 @@ package sample.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -19,25 +19,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
+import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import sample.student.StudentDTO;
 import sample.util.XMLUlti;
 
 /**
  *
  * @author khai
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "InsertServlet", urlPatterns = {"/InsertServlet"})
+public class InsertServlet extends HttpServlet {
 
-    private final String xmlFile = "/WEB-INF/studentAccounts.xml";
-    private final String uri = "search.jsp";
+    private final String xmlFile = "WEB-INF/studentAccounts.xml";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,8 +48,20 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String searchValue = request.getParameter("txtSearchValue");
+        String password = request.getParameter("txtPassword");
+        String id = request.getParameter("txtId");
+        String firstname = request.getParameter("txtFirst");
+        String lastname = request.getParameter("txtLast");
+        String middle = request.getParameter("txtMiddle");
+        String address = request.getParameter("txtAddress");
+        String sClass = request.getParameter("txtClass");
+        String s = request.getParameter("chkSex");
+        String sex = "1";
+        if (s != null) {
+            sex = "0";
+        }
         try {
+            System.out.println("register here");
             ServletContext context = this.getServletContext();
             Document doc = (Document) context.getAttribute("DOMTREE");
             if (doc == null) {
@@ -63,45 +71,41 @@ public class SearchServlet extends HttpServlet {
                 context.setAttribute("DOMTREE", doc);
             }
             if (doc != null) {
-                XPath xpath = XMLUlti.getXPath();
-                String exp = "//student[contains(address,'" + searchValue + "')]";
-                NodeList students = (NodeList) xpath.evaluate(exp, doc, XPathConstants.NODESET);
-                if (students != null) {
-                    List<StudentDTO> listStudent = null;
-                    for (int i = 0; i < students.getLength(); i++) {
-                        Node tmp = students.item(i);
-                        exp = "@id";
-                        String id = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        exp = "firstname";
-                        String firstname = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        exp = "middlename";
-                        String middlename = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        exp = "lastname";
-                        String lastname = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        exp = "sex";
-                        String sex = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        exp = "status";
-                        String status = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        exp = "address";
-                        String address = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        StudentDTO dto = new StudentDTO(id, status, lastname, firstname, middlename, sex, address, status);
-                        if (listStudent == null) {
-                            listStudent = new ArrayList<StudentDTO>();
+                Map<String, String> studentAttribute = new HashMap();
+                studentAttribute.put("id", id);
+                studentAttribute.put("class", sClass);
+                Element student = XMLUlti.createDOMElement(doc, "student", null, studentAttribute);
+                Element lastnameNode = XMLUlti.createDOMElement(doc, "lastname", lastname, null);
+                student.appendChild(lastnameNode);
+                Element firstnameNode = XMLUlti.createDOMElement(doc, "firstname", firstname, null);
+                student.appendChild(firstnameNode);
+                Element middlenameNode = XMLUlti.createDOMElement(doc, "middlename", middle, null);
+                student.appendChild(middlenameNode);
+                Element addressNode = XMLUlti.createDOMElement(doc, "address", address, null);
+                student.appendChild(addressNode);
+                Element sexNode = XMLUlti.createDOMElement(doc, "sex", sex, null);
+                student.appendChild(sexNode);
+                Element passwordNode = XMLUlti.createDOMElement(doc, "password", password, null);
+                student.appendChild(passwordNode);
 
-                        }
-                        listStudent.add(dto);
+                // cach1:  lay doc.getdocumentelement()
+                NodeList students = doc.getElementsByTagName("students");
+                //khong can duyet for vi chi co 1 node duy nhat
 
-                    }
-                    request.setAttribute("SEARCHRESULT", listStudent);
-                }
+                students.item(0).appendChild(student);
+                String realPath = this.getServletContext().getRealPath("/");
+                String xmlFilePath = realPath + xmlFile;
+                XMLUlti.tranformXMLtoFile(doc, xmlFilePath);
+
             }
         } catch (ParserConfigurationException ex) {
-            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InsertServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (XPathExpressionException ex) {
-            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InsertServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(InsertServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
+            String uri = "index.jsp";
             RequestDispatcher rd = request.getRequestDispatcher(uri);
             rd.forward(request, response);
             out.close();

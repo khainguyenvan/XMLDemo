@@ -47,6 +47,11 @@
                                 <td>${dto.address}</td>
                                 <td><c:if test="${fn:trim(dto.sex) == '1'}" >male</c:if><c:if test="${fn:trim(dto.sex) == '0'}" >female</c:if></td>
                                 <td>${dto.status}</td>
+                                <td><c:url var="deleteLink" value="CenterServlet">
+                                        <c:param name="btAction" value="Delete"></c:param>
+                                        <c:param name="id" value="${dto.id}"></c:param>
+                                        <c:param name="lastSearchValue" value="${param.txtSearchValue}"></c:param>
+                                    </c:url><a href="${deleteLink}">Delete</a> </td>
                             </tr>
                         </c:forEach>
                     </tbody>
