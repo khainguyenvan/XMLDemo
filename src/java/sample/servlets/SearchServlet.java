@@ -72,6 +72,8 @@ public class SearchServlet extends HttpServlet {
                         Node tmp = students.item(i);
                         exp = "@id";
                         String id = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
+                        exp = "@class";
+                        String sClass = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
                         exp = "firstname";
                         String firstname = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
                         exp = "middlename";
@@ -84,7 +86,7 @@ public class SearchServlet extends HttpServlet {
                         String status = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
                         exp = "address";
                         String address = (String) xpath.evaluate(exp, tmp, XPathConstants.STRING);
-                        StudentDTO dto = new StudentDTO(id, status, lastname, firstname, middlename, sex, address, status);
+                        StudentDTO dto = new StudentDTO(id, sClass, lastname, firstname, middlename, sex, address, status);
                         if (listStudent == null) {
                             listStudent = new ArrayList<StudentDTO>();
 

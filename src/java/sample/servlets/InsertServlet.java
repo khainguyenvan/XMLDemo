@@ -33,7 +33,7 @@ import sample.util.XMLUlti;
 @WebServlet(name = "InsertServlet", urlPatterns = {"/InsertServlet"})
 public class InsertServlet extends HttpServlet {
 
-    private final String xmlFile = "WEB-INF/studentAccounts.xml";
+    private final String xmlFile = "/WEB-INF/studentAccounts.xml";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,13 +55,13 @@ public class InsertServlet extends HttpServlet {
         String middle = request.getParameter("txtMiddle");
         String address = request.getParameter("txtAddress");
         String sClass = request.getParameter("txtClass");
+        String status = request.getParameter("txtStatus");
         String s = request.getParameter("chkSex");
         String sex = "1";
         if (s != null) {
             sex = "0";
         }
         try {
-            System.out.println("register here");
             ServletContext context = this.getServletContext();
             Document doc = (Document) context.getAttribute("DOMTREE");
             if (doc == null) {
@@ -85,6 +85,8 @@ public class InsertServlet extends HttpServlet {
                 student.appendChild(addressNode);
                 Element sexNode = XMLUlti.createDOMElement(doc, "sex", sex, null);
                 student.appendChild(sexNode);
+                Element statusNode = XMLUlti.createDOMElement(doc, "status", status, null);
+                student.appendChild(statusNode);
                 Element passwordNode = XMLUlti.createDOMElement(doc, "password", password, null);
                 student.appendChild(passwordNode);
 

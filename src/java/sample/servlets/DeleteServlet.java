@@ -33,7 +33,7 @@ import sample.util.XMLUlti;
 @WebServlet(name = "DeleteServlet", urlPatterns = {"/DeleteServlet"})
 public class DeleteServlet extends HttpServlet {
 
-    private final String xmlFile = "WEB-INF/studentAccounts.xml";
+    private final String xmlFile = "/WEB-INF/studentAccounts.xml";
     private final String searchPage = "search.jsp";
     private final String invalidPage = "invalidPage.html";
     String uri = invalidPage;

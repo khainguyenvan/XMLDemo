@@ -24,6 +24,7 @@ public class CenterServlet extends HttpServlet {
     private final String processLogin = "LoginServlet";
     private final String processSearch = "SearchServlet";
     private final String invalid = "invalidPage.html";
+    private final String processInsert = "InsertServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,9 +46,11 @@ public class CenterServlet extends HttpServlet {
                 url = invalid;
             } else if (button.equals("Login")) {
                 url = processLogin;
-            } else if( button.equals("Search")){
+            } else if (button.equals("Search")) {
                 url = processSearch;
-            }else{
+            } else if (button.equals("Register")) {
+                url = processInsert;
+            } else {
                 url = invalid;
             }
             RequestDispatcher rd = request.getRequestDispatcher(url);
